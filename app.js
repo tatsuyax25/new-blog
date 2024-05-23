@@ -1,3 +1,6 @@
+// Load environment variables from .env file
+require('dotenv').config();
+
 const express = require('express');
 const mongoose = require('mongoose');
 const passport = require('passport');
@@ -5,7 +8,6 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const methodOverride = require('method-override');
 const bodyParser = require('body-parser');
-const dotenv = require('dotenv');
 const connectDB = require('./config/database');
 
 dotenv.config();
@@ -13,18 +15,22 @@ dotenv.config();
 // Passport config
 require('./config/passport')(passport);
 
+// Connect to MongoDB
 connectDB();
 
 const app = express();
 
-// Body parser
+// Body parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// EJS
+// Method override middleware
+app.use(methodOverride('_method'));
+
+// Set EJS as the template engine
 app.set('view engine', 'ejs');
 
-// Sessions
+// Express session middleware
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
