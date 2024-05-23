@@ -5,12 +5,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const session = require('express-session');
-const MongoStore = require('connect-mongo')(session);
+const MongoStore = require('connect-mongo');
 const methodOverride = require('method-override');
 const bodyParser = require('body-parser');
-const connectDB = require('./config/database');
-
-dotenv.config();
+const connectDB = require('./config/db');
 
 // Passport config
 require('./config/passport')(passport);
@@ -31,17 +29,24 @@ app.use(methodOverride('_method'));
 app.set('view engine', 'ejs');
 
 // Express session middleware
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  store: new MongoStore({ mongooseConnection: mongoose.connection })
-}));
-
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: new MongoStore({
+      mongoUrl: process.env.MONGO_URI,
+      collectionName: "sessions",
+    }),
+  })
+);
 
 // Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Set static folder
+app.use(express.static('public'));
 
 // Routes
 app.use('/', require('./routes/index'));
@@ -51,4 +56,6 @@ app.use('/blogs', require('./routes/blogs'));
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, console.log(`Server running in ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
