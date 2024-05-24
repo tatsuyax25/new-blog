@@ -45,6 +45,12 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Middleware to set user for views
+app.use((req, res, next) => {
+  res.locals.user = req.user || null;
+  next();
+});
+
 // Set static folder
 app.use(express.static('public'));
 
