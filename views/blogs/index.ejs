@@ -1,0 +1,19 @@
+<%- include('layouts/main', { title: 'Blog Dev'}) %>
+<h1>All Blogs</h1>
+<% if (blogs.length> 0) { %>
+  <ul>
+    <% blogs.forEach(blog=> { %>
+      <li>
+        <h2><a href="/blogs/<%= blog._id %>">
+            <%= blog.title %>
+          </a></h2>
+        <p>
+          <%= blog.body.substring(0, 100) %>...
+        </p>
+        <small>By <%= blog.user.name %> on <%= new Date(blog.createdAt).toDateString() %></small>
+      </li>
+      <% }) %>
+  </ul>
+<% } else { %>
+  <p>No blogs found</p>
+<% } %>
