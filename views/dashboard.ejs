@@ -1,0 +1,13 @@
+<%- include('layouts/main', { title: 'Dashboard' }) %>
+<h1>Dashboard</h1>
+<% if (blogs.length> 0) { %>
+  <ul>
+    <% blogs.forEach(blog=> { %>
+      <li>
+        <%= blog.title %>
+      </li>
+      <% }) %>
+  </ul>
+<% } else { %>
+  <p>No blogs yet</p>
+<% } %>
