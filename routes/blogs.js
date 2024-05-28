@@ -3,24 +3,21 @@ const router = express.Router();
 const { ensureAuth } = require('../middleware/auth');
 const Blog = require('../models/Blog');
 
-router.get('/add', ensureAuth, (req, res) => {
-  res.render('blogs/add');
-});
-
-router.post('/', ensureAuth, async (req, res) => {
+// Show all blogs
+router.get('/', ensureAuth, async (req, res) => {
   try {
-    req.body.user = req.user.id;
-    await Blog.create(req.body);
-    res.redirect('/dashboard');
+    const blogs = await Blog.find({}).populate('user').lean();
+    res.render('blogs/index', { blogs });
   } catch (err) {
     console.error(err);
     res.render('error/500');
   }
 });
 
+// Show single blog
 router.get('/:id', ensureAuth, async (req, res) => {
   try {
-    let blog = await Blog.findById(req.params.id).populate('user').lean();
+    const blog = await Blog.findById(req.params.id).populate('user').lean();
     if (!blog) {
       return res.render('error/404');
     }
@@ -31,9 +28,27 @@ router.get('/:id', ensureAuth, async (req, res) => {
   }
 });
 
-router.get('/edit/:id', ensureAuth, async (req, res) => {
+// Show form to create new blog
+router.get('/new', ensureAuth, (req, res) => {
+  res.render('blogs/new');
+});
+
+// Process new blog
+router.post('/', ensureAuth, async (req, res) => {
   try {
-    let blog = await Blog.findById(req.params.id).lean();
+    req.body.user = req.user.id;
+    await Blog.create(req.body);
+    res.redirect('/blogs');
+  } catch (err) {
+    console.error(err);
+    res.render('error/500');
+  }
+});
+
+// Show form to edit blog
+router.get('/:id/edit', ensureAuth, async (req, res) => {
+  try {
+    const blog = await Blog.findById(req.params.id).lean();
     if (!blog) {
       return res.render('error/404');
     }
@@ -48,27 +63,29 @@ router.get('/edit/:id', ensureAuth, async (req, res) => {
   }
 });
 
-router.put("/:id", ensureAuth, async (req, res) => {
+// Update blog
+router.put('/:id', ensureAuth, async (req, res) => {
   try {
     let blog = await Blog.findById(req.params.id).lean();
     if (!blog) {
-      return res.render("error/404");
+      return res.render('error/404');
     }
     if (blog.user != req.user.id) {
-      res.redirect("/blogs");
+      res.redirect('/blogs');
     } else {
       blog = await Blog.findOneAndUpdate({ _id: req.params.id }, req.body, {
         new: true,
         runValidators: true,
       });
-      res.redirect("/dashboard");
+      res.redirect('/blogs');
     }
   } catch (err) {
     console.error(err);
-    res.render("error/500");
+    res.render('error/500');
   }
 });
 
+// Delete blog
 router.delete('/:id', ensureAuth, async (req, res) => {
   try {
     let blog = await Blog.findById(req.params.id).lean();
@@ -79,7 +96,7 @@ router.delete('/:id', ensureAuth, async (req, res) => {
       res.redirect('/blogs');
     } else {
       await Blog.remove({ _id: req.params.id });
-      res.redirect('/dashboard');
+      res.redirect('/blogs');
     }
   } catch (err) {
     console.error(err);
