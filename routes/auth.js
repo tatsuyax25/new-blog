@@ -17,9 +17,9 @@ router.get('/google/callback', passport.authenticate('google', { failureRedirect
 router.get("/logout", (req, res) => {
   req.logout((err) => {
     if (err) {
-      return next(err);
+      console.error(err);
+      res.redirect('/');
     }
-    req.flash("success", "You are logged out");
     res.redirect("/");
   });
 });
