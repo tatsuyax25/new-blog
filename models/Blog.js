@@ -3,25 +3,26 @@ const mongoose = require('mongoose');
 const BlogSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true
+    required: true,
+    trim: true,
   },
   body: {
     type: String,
-    required: true
+    required: true,
   },
   status: {
     type: String,
     default: 'public',
-    enum: ['public', 'private']
+    enum: ['public', 'private'],
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
   },
   createdAt: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
 module.exports = mongoose.model('Blog', BlogSchema);
