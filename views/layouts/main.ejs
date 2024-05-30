@@ -10,8 +10,10 @@
 <body>
   <%- include('../partials/header', { user: user }) %>
   <div class="container mt-4">
-    <%- include('../partials/messages') %> <!-- For any flash messages, if applicable -->
-    <%- body %> <!-- This is where the content of the child template will be rendered -->
+    <% if (typeof include==='function' && include('../partials/messages', { messages: messages }) !==undefined) { %>
+      <%- include('../partials/messages', { messages: messages }) %>
+    <% } %>
+    <%- body %>
   </div>
   <%- include('../partials/footer') %>
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
