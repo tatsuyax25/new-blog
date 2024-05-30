@@ -17,4 +17,16 @@ router.get('/dashboard', ensureAuth, async (req, res) => {
   }
 });
 
+// Example of setting a success flash message
+router.get('/success', (req, res) => {
+  req.flash('success', 'You have successfully logged in');
+  res.redirect('/dashboard');
+});
+
+// Example of setting an error flash message
+router.get('/error', (req, res) => {
+  req.flash('error', 'An error occurred');
+  res.redirect('/');
+});
+
 module.exports = router;

@@ -10,9 +10,7 @@
 <body>
   <%- include('../partials/header', { user: user }) %>
   <div class="container mt-4">
-    <% if (typeof include==='function' && include('../partials/messages', { messages: messages }) !==undefined) { %>
-      <%- include('../partials/messages', { messages: messages }) %>
-    <% } %>
+    <%- include('../partials/messages') %> <!-- For any flash messages -->
     <%- body %>
   </div>
   <%- include('../partials/footer') %>

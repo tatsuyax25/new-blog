@@ -1,8 +1,12 @@
 <!-- /views/partials/messages.ejs -->
-<% if (messages && messages.length > 0) { %>
-  <div class="alert alert-info">
-    <% messages.forEach(function(message) {
-      <p><%= message %></p>
-   <% }) %>
-  </div>
+<% if (messages && Object.keys(messages).length> 0) { %>
+  <% Object.keys(messages).forEach(function(key) { %>
+    <div class="alert alert-<%= key %>">
+      <% messages[key].forEach(function(message) { %>
+        <p>
+          <%= message %>
+        </p>
+      <% }) %>
+    </div>
+  <% }) %>
 <% } %>
