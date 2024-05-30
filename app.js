@@ -8,6 +8,7 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const methodOverride = require('method-override');
 const bodyParser = require('body-parser');
+const flash = require('connect-flash');
 const connectDB = require('./config/db');
 
 // Passport config
@@ -44,6 +45,9 @@ app.use(
 // Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Connect flash middleware
+app.use(flash());
 
 // Middleware to set user for views
 app.use((req, res, next) => {
