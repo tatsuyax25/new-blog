@@ -7,6 +7,10 @@ router.get('/', ensureGuest, (req, res) => {
   res.render('index', { title: 'Home', user: req.user });
 });
 
+router.get('/login', ensureGuest, (req, res) => {
+  res.render('login', { layout: 'main' });
+});
+
 router.get('/dashboard', ensureAuth, async (req, res) => {
   try {
     const blogs = await Blog.find({ user: req.user.id }).lean();
