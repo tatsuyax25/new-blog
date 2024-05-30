@@ -40,6 +40,11 @@ module.exports = function (passport) {
   });
 
   passport.deserializeUser(async (id, done) => {
-    User.findById(id, (err, user) => done(err, user));
+    try {
+      const user = await User.findById(id);
+      done(null, user);
+    } catch (err) {
+      done(err, null);
+    }
   });
 };
