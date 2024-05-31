@@ -10,7 +10,7 @@
 <body>
   <%- include('../partials/header', { user: user }) %>
   <div class="container mt-4">
-    <%- include('../partials/messages') %> <!-- For any flash messages -->
+    <%- include('../partials/messages', { messages: messages }) %> <!-- For any flash messages -->
     <%- body %>
   </div>
   <%- include('../partials/footer') %>
