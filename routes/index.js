@@ -4,7 +4,12 @@ const { ensureAuth, ensureGuest } = require('../middleware/auth');
 const Blog = require('../models/Blog');
 
 router.get('/', ensureGuest, (req, res) => {
-  res.render("index", { title: "Home", user: req.user, messages: req.flash() });
+  res.render("index", {
+    title: "Home",
+    user: req.user,
+    body: "<h1>Welcome to Blog Dev</h1>",
+    messages: req.flash(),
+  });
 });
 
 router.get('/dashboard', ensureAuth, async (req, res) => {
@@ -14,6 +19,7 @@ router.get('/dashboard', ensureAuth, async (req, res) => {
       title: "Dashboard",
       user: req.user,
       blogs,
+      body: "",
       messages: req.flash(),
     });
   } catch (err) {
@@ -21,6 +27,7 @@ router.get('/dashboard', ensureAuth, async (req, res) => {
     res.render("error/500", {
       title: "Error",
       user: req.user,
+      body: "",
       messages: req.flash(),
     });
   }
