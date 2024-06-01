@@ -16,7 +16,7 @@ module.exports = function (passport) {
           displayName: profile.displayName || '',
           firstName: profile.name?.givenName || (profile.displayName ? profile.displayName.split(' ')[0] : ''),
           lastName: profile.name?.familyName || (profile.displayName ? profile.displayName.split(' ').slice(-1).join(' ') : ''),
-          image: profile.photos[0]?.value || '',
+          image: (profile.photos && profile.photos.length > 0) ? profile.photos[0]?.value : '',
         };
 
         try {
