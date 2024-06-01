@@ -12,10 +12,10 @@ module.exports = function (passport) {
       async (profile, done) => {
         const newUser = {
           googleId: profile.id,
-          displayName: profile.displayName,
-          firstName: profile.name.givenName,
-          lastName: profile.name.familyName,
-          image: profile.photos[0].value,
+          displayName: profile.displayName || '',
+          firstName: profile.name?.givenName || (profile.displayName ? profile.displayName.split(' ')[0] : ''),
+          lastName: profile.name?.familyName || (profile.displayName ? profile.displayName.split(' ').slice(-1).join(' ') : ''),
+          image: profile.photos[0]?.value,
         };
 
         try {
