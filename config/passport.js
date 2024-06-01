@@ -10,12 +10,13 @@ module.exports = function (passport) {
         callbackURL: "/auth/google/callback",
       },
       async (profile, done) => {
+        console.log("Google profile", profile);
         const newUser = {
           googleId: profile.id,
           displayName: profile.displayName || '',
           firstName: profile.name?.givenName || (profile.displayName ? profile.displayName.split(' ')[0] : ''),
           lastName: profile.name?.familyName || (profile.displayName ? profile.displayName.split(' ').slice(-1).join(' ') : ''),
-          image: profile.photos[0]?.value,
+          image: profile.photos[0]?.value || '',
         };
 
         try {
