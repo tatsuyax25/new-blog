@@ -7,20 +7,39 @@ module.exports = function (passport) {
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: "/auth/google/callback",
+        callbackURL: process.env.GOOGLE_CALLBACK_URL,
       },
       async (profile, done) => {
-        console.log("Google profile", profile);
-        const newUser = {
-          googleId: profile.id,
-          displayName: profile.displayName || '',
-          firstName: profile.name?.givenName || (profile.displayName ? profile.displayName.split(' ')[0] : ''),
-          lastName: profile.name?.familyName || (profile.displayName ? profile.displayName.split(' ').slice(-1).join(' ') : ''),
-          image: (profile.photos && profile.photos.length > 0) ? profile.photos[0]?.value : '',
-        };
-
         try {
-          let user = await User.findOne({ googleId: profile.id });
+          // Ensure all fields are populated correctly
+          const googleId = profile.id;
+          const displayName = profile.displayName || "";
+          const firstName =
+            profile.name?.givenName ||
+            (profile.displayName ? profile.displayName.split(" ")[0] : "");
+          const lastName =
+            profile.name?.familyName ||
+            (profile.displayName
+              ? profile.displayName.split(" ").slice(-1).join(" ")
+              : "");
+          const image =
+            profile.photos && profile.photos.length > 0
+              ? profile.photos[0].value
+              : "";
+
+          if (!googleId || !displayName || !firstName || !lastName) {
+            throw new Error("Required profile information is missing.");
+          }
+
+          const newUser = {
+            googleId,
+            displayName,
+            firstName,
+            lastName,
+            image,
+          };
+
+          let user = await User.findOne({ googleId });
           if (user) {
             done(null, user);
           } else {
