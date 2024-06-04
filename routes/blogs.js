@@ -36,12 +36,12 @@ router.get('/new', ensureAuth, (req, res) => {
 // Process new blog
 router.post('/', ensureAuth, async (req, res) => {
   try {
-    req.body.user = req.user.id;
-    await Blog.create(req.body);
-    res.redirect('/blogs');
+    req.body.user = req.user.id; // Assign the current user's ID to the blog post's user field
+    await Blog.create(req.body); // Create a new blog post with the data from the request body
+    res.redirect('/blogs'); // Redirect to the list of all blog posts after creating the new one
   } catch (err) {
     console.error(err);
-    res.render('error/500');
+    res.render('error/500'); // Render an error page if there's an error creating the blog post
   }
 });
 
