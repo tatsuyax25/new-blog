@@ -14,20 +14,6 @@ router.get('/', ensureAuth, async (req, res) => {
   }
 });
 
-// Show single blog
-router.get('/:id', ensureAuth, async (req, res) => {
-  try {
-    const blog = await Blog.findById(req.params.id).populate('user').lean();
-    if (!blog) {
-      return res.render('error/404');
-    }
-    res.render('blogs/show', { blog });
-  } catch (err) {
-    console.error(err);
-    res.render('error/500');
-  }
-});
-
 // Show form to create new blog
 router.get('/new', ensureAuth, (req, res) => {
   res.render('blogs/new');
@@ -42,6 +28,20 @@ router.post('/', ensureAuth, async (req, res) => {
   } catch (err) {
     console.error(err);
     res.render('error/500'); // Render an error page if there's an error creating the blog post
+  }
+});
+
+// Show single blog
+router.get('/:id', ensureAuth, async (req, res) => {
+  try {
+    const blog = await Blog.findById(req.params.id).populate('user').lean();
+    if (!blog) {
+      return res.render('error/404');
+    }
+    res.render('blogs/show', { blog });
+  } catch (err) {
+    console.error(err);
+    res.render('error/500');
   }
 });
 
