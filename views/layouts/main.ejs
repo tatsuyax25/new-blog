@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
-  <%- include('../partials/header', { user: user }) %>
+  <%- include('../partials/header', { user: typeof user !== 'undefined' ? user : null }) %>
   <div class="container mt-4">
     <%- include('../partials/messages', { messages: messages }) %> <!-- For any flash messages -->
     <%- body %> <!-- Render the body content -->
