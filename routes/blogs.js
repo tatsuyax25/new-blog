@@ -16,7 +16,7 @@ router.get('/', ensureAuth, async (req, res) => {
 
 // Show form to create new blog
 router.get('/new', ensureAuth, (req, res) => {
-  res.render('blogs/new');
+  res.render('blogs/new', { user: req.user });
 });
 
 // Process new blog
@@ -27,7 +27,7 @@ router.post('/', ensureAuth, async (req, res) => {
     res.redirect('/blogs'); // Redirect to the list of all blog posts after creating the new one
   } catch (err) {
     console.error(err);
-    res.render('error/500'); // Render an error page if there's an error creating the blog post
+    res.render('error/500', { user: req.user }); // Render an error page if there's an error creating the blog post
   }
 });
 
