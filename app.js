@@ -70,7 +70,6 @@ app.use((req, res, next) => {
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  console.log("User in error middleware:", req.user);
   res.status(500).render('error/500', { user: req.user });
 });
 
