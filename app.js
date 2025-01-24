@@ -1,6 +1,4 @@
-// Load environment variables from .env file
-require('dotenv').config();
-
+const expressLayouts = require('express-ejs-layouts');
 const express = require('express');
 const passport = require('passport');
 const session = require('express-session');
@@ -10,6 +8,9 @@ const bodyParser = require('body-parser');
 const flash = require('connect-flash');
 const connectDB = require('./config/db');
 
+// Load environment variables from .env file
+require('dotenv').config();
+
 // Passport config
 require('./config/passport')(passport);
 
@@ -18,15 +19,16 @@ connectDB();
 
 const app = express();
 
+// Set EJS as the template engine and use layouts
+app.set('view engine', 'ejs');
+app.use(expressLayouts);
+app.set('layout', 'layouts/main');
+
 // Body parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
 // Method override middleware
 app.use(methodOverride('_method'));
-
-// Set EJS as the template engine
-app.set('view engine', 'ejs');
 
 // Express session middleware
 app.use(
@@ -44,7 +46,6 @@ app.use(
 // Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
-
 // Connect flash middleware
 app.use(flash());
 

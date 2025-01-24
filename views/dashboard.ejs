@@ -1,8 +1,8 @@
-<%- include('layouts/main', { title: 'Dashboard', user: user }) %>
+<% layout('layout/main') %>
 <h1>Dashboard</h1>
 <% if (blogs.length > 0) { %>
   <ul>
-    <% blogs.forEach(blog=> { %>
+    <% blogs.forEach(blog => { %>
       <li>
         <%= blog.title %>
       </li>
