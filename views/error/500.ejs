@@ -1,3 +1,4 @@
-<%- include('../layouts/main', { title: 'Server Error', user: user }) %>
-<h1>Error 500 - Internal Server Error</h1>
-<p>Sorry, something went wrong on our end. Please try again later.</p>
+<%- include('../layouts/main', { title: 'Server Error' , user: user, body: ` 
+  <h1>Error 500 - Internal Server Error</h1>
+  <p>Sorry, something went wrong on our end. Please try again later.</p>
+` }) %>
